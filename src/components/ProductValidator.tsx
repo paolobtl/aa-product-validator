@@ -242,9 +242,11 @@ export default function ProductValidator() {
                           <div className="space-y-1 mt-1">
                             {product.events.map((event, eventIndex) => (
                               <div key={eventIndex} className="font-mono text-xs bg-adobe-teal/10 p-2 rounded">
-                                {Object.entries(event).map(([key, value]) => (
-                                  <span key={key}>{key}={String(value)}</span>
-                                ))}
+                                {Object.entries(event).map(([key, value]) =>
+                                  value !== undefined ? (
+                                    <span key={key}>{key}={String(value)}</span>
+                                  ) : <span key={key}>{key}{''}</span>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -257,9 +259,11 @@ export default function ProductValidator() {
                           <div className="space-y-1 mt-1">
                             {product.evars.map((evar, evarIndex) => (
                               <div key={evarIndex} className="font-mono text-xs bg-adobe-teal/10 p-2 rounded">
-                                {Object.entries(evar).map(([key, value]) => (
-                                  <span key={key}>{key}={String(value)}</span>
-                                ))}
+                                {Object.entries(evar).map(([key, value]) =>
+                                  value !== undefined ? (
+                                    <span key={key}>{key}={String(value)}</span>
+                                  ) : <span key={key}>{key}{''}</span>
+                                )}
                               </div>
                             ))}
                           </div>
