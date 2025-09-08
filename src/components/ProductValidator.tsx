@@ -6,12 +6,16 @@ import { CheckCircle, Code, AlertTriangle, Rocket } from "lucide-react";
 
 // Adobe Analytics product string validation logic
 const processEventAttributes = (eventAttribute: string) => {
-  if (typeof eventAttribute !== 'string' || !eventAttribute?.includes('|')) return;
-  return eventAttribute.split('|').map((event) => {
-    const [key, value] = event.split('=');
-    return { [key]: value };
-  });
+  if (typeof eventAttribute !== 'string' || !eventAttribute.trim()) return [];
+  return eventAttribute
+    .split('|')
+    .filter(Boolean)
+    .map((event) => {
+      const [key, value] = event.split('=');
+      return { [key]: value };
+    });
 };
+
 
 const normalizeAttributes = (raw: string) => {
   const result = raw ? processEventAttributes(raw) : [];
@@ -23,8 +27,8 @@ interface Product {
   item: string;
   quantity: number;
   price: number;
-  events: any[];
-  evars: any[];
+  events: Record<string, string | undefined>[];
+  evars: Record<string, string | undefined>[];
   isValid: boolean;
 }
 
@@ -33,9 +37,8 @@ const parseProduct = (product: string): Product => {
   const [category, item, quantity, price, rawEvents, rawEvars] = parts;
   
   // Check if we have the minimum required parts (category, item, quantity, price)
-  const hasMinimumParts = parts.length >= 4;
   const hasValidItem = Boolean(item && item.trim());
-  const parsedPrice = parseFloat(price?.replace(',', '.') || '0'); // Handle comma decimal separator
+  const parsedPrice = parseFloat(price?.replace(',', '.') || ''); // Handle comma decimal separator
   const isValidPrice = !isNaN(parsedPrice) && parsedPrice >= 0;
   
   return {
@@ -45,7 +48,7 @@ const parseProduct = (product: string): Product => {
     price: parsedPrice,
     events: normalizeAttributes(rawEvents),
     evars: normalizeAttributes(rawEvars),
-    isValid: hasMinimumParts && hasValidItem && isValidPrice,
+    isValid: hasValidItem && isValidPrice,
   };
 };
 
@@ -155,7 +158,7 @@ export default function ProductValidator() {
               <p className="text-muted-foreground">
                 {isStringValid 
                   ? 'All products in the string are valid'
-                  : 'Parsing errors detected - check for commas'
+                  : 'Parsing errors detected - check yhe string and individual products below'
                 }
               </p>
               {!isStringValid && validation.some(p => p.category && /^\d+[.,]?\d*$/.test(p.category.trim())) && (
@@ -229,7 +232,7 @@ export default function ProductValidator() {
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Price</label>
                       <p className="font-mono text-sm bg-muted p-2 rounded">
-                        {product.price.toFixed(2)}
+                        {product.price}
                       </p>
                     </div>
                   </div>
