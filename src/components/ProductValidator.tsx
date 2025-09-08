@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./../components/ui/card";
 import { Textarea } from "./../components/ui/textarea";
 import { Badge } from "./../components/ui/badge";
-import { CheckCircle, Code, XCircle, AlertTriangle } from "lucide-react";
+import { CheckCircle, Code, AlertTriangle, Rocket } from "lucide-react";
 
 // Adobe Analytics product string validation logic
 const processEventAttributes = (eventAttribute: string) => {
@@ -122,7 +122,7 @@ export default function ProductValidator() {
       <Card className="shadow-card">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-primary">
-            <AlertTriangle className="h-5 w-5" />
+            <Rocket className="h-5 w-5" />
             Product String Input
           </CardTitle>
         </CardHeader>
@@ -146,11 +146,11 @@ export default function ProductValidator() {
             {isStringValid ? (
               <CheckCircle className="h-6 w-6 text-success" />
             ) : (
-              <XCircle className="h-6 w-6 text-destructive" />
+              <AlertTriangle className="h-6 w-6 text-destructive" />
             )}
             <div>
               <h3 className="font-semibold text-lg">
-                {isStringValid ? 'Valid Product String' : 'Invalid Product String'}
+                {isStringValid ? 'Valid Product String' : 'Invalid Product String' }
               </h3>
               <p className="text-muted-foreground">
                 {isStringValid 
