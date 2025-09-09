@@ -158,7 +158,7 @@ export default function ProductValidator() {
               <p className="text-muted-foreground">
                 {isStringValid 
                   ? 'All products in the string are valid'
-                  : 'Parsing errors detected - check yhe string and individual products below'
+                  : 'Parsing errors detected - check the string and individual products below'
                 }
               </p>
               {!isStringValid && validation.some(p => p.category && /^\d+[.,]?\d*$/.test(p.category.trim())) && (
