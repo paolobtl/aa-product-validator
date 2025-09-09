@@ -163,7 +163,10 @@ export default function ProductValidator() {
                 }
               </h3>
               <p className="text-muted-foreground">
-                {isStringValid 
+                {
+                prodString.trim() === ''
+                ? ''
+                : isStringValid 
                   ? 'All products in the string are valid'
                   : 'Parsing errors detected - check yhe string and individual products below'
                 }
@@ -291,7 +294,6 @@ export default function ProductValidator() {
       { /* Footer */}
       <footer className="text-center text-sm text-muted-foreground mt-12 mb-6">
         <p>
-          
           Built by <a href="https://paolobietolini.com" target="_blank" className="text-primary hover:underline">Paolo Bietolini</a> 
           <br />
           View the source on <a href="https://github.com/paolobtl/aa-product-validator" target="_blank" className="text-primary hover:underline">GitHub</a>.
