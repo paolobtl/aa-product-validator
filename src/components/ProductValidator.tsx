@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./../components/ui/card";
 import { Textarea } from "./../components/ui/textarea";
 import { Badge } from "./../components/ui/badge";
-import { CheckCircle, Code, AlertTriangle, Rocket } from "lucide-react";
+import { CheckCircle, Code, AlertTriangle, Rocket, CircleQuestionMark } from "lucide-react";
 
 // Adobe Analytics product string validation logic
 const processEventAttributes = (eventAttribute: string) => {
@@ -39,7 +39,7 @@ const parseProduct = (product: string): Product => {
   // Check if we have the minimum required parts (category, item, quantity, price)
   const hasValidItem = Boolean(item && item.trim());
   const parsedPrice = parseFloat(price?.replace(',', '.') || ''); // Handle comma decimal separator
-  const isValidPrice = !isNaN(parsedPrice) && parsedPrice >= 0;
+  //const isValidPrice = !isNaN(parsedPrice) && parsedPrice >= 0;
   
   return {
     category: category || '',
@@ -48,13 +48,13 @@ const parseProduct = (product: string): Product => {
     price: parsedPrice,
     events: normalizeAttributes(rawEvents),
     evars: normalizeAttributes(rawEvars),
-    isValid: hasValidItem && isValidPrice,
+    isValid: hasValidItem,
   };
 };
 
 const validateProductString = (s: string): Product[] => {
   if (typeof s !== 'string' || !s.trim()) return [];
-  
+  s = s.replace(/'|"/gm,'').trim();
   // Split on commas - this will break if there are commas in price fields
   const rawProducts = s.split(',');
   const products = rawProducts.map(parseProduct);
@@ -88,11 +88,10 @@ const validateProductString = (s: string): Product[] => {
 
 export default function ProductValidator() {
   const [prodString, setProdString] = useState(
-    "Example category 1;Example product 1;1;3.50;;eVar100|eVar10=1.00,Example category 2;Example product 2;1;5.99;event10|event12=99"
+    "Example category 1;Example product 1;1;3.50,Example category 2;Example product 2;1;5.99"
   );
   const [validation, setValidation] = useState<Product[]>([]);
   const [isStringValid, setIsStringValid] = useState(true);
-
   useEffect(() => {
     const validationResult = validateProductString(prodString);
     setValidation(validationResult);
@@ -146,19 +145,27 @@ export default function ProductValidator() {
       <Card className={`shadow-card border-l-4 ${isStringValid ? 'border-l-success' : 'border-l-destructive'}`}>
         <CardContent className="pt-6">
           <div className="flex justify-center items-center gap-3">
-            {isStringValid ? (
+            {prodString.trim() === '' ? 
+            <CircleQuestionMark className="h-6 w-6 text-amber-500" />
+            :isStringValid 
+            ? (
               <CheckCircle className="h-6 w-6 text-success" />
             ) : (
               <AlertTriangle className="h-6 w-6 text-destructive" />
             )}
             <div>
               <h3 className="font-semibold text-lg">
-                {isStringValid ? 'Valid Product String' : 'Invalid Product String' }
+                {prodString.trim() === ''
+                  ? 'Please enter a product string to validate'
+                  : isStringValid
+                    ? 'Product string is valid'
+                    : 'Product string has validation errors'
+                }
               </h3>
               <p className="text-muted-foreground">
                 {isStringValid 
                   ? 'All products in the string are valid'
-                  : 'Parsing errors detected - check the string and individual products below'
+                  : 'Parsing errors detected - check yhe string and individual products below'
                 }
               </p>
               {!isStringValid && validation.some(p => p.category && /^\d+[.,]?\d*$/.test(p.category.trim())) && (
@@ -284,9 +291,14 @@ export default function ProductValidator() {
       { /* Footer */}
       <footer className="text-center text-sm text-muted-foreground mt-12 mb-6">
         <p>
-          Built by <a href="https://paolobietolini.com" target="_blank" className="text-primary hover:underline">Paolo Bietolini</a>. 
+          
+          Built by <a href="https://paolobietolini.com" target="_blank" className="text-primary hover:underline">Paolo Bietolini</a> 
+          <br />
           View the source on <a href="https://github.com/paolobtl/aa-product-validator" target="_blank" className="text-primary hover:underline">GitHub</a>.
-        </p>
+          <br />
+          <a href="https://www.apache.org/licenses/LICENSE-2.0.html" target="_blank" className="text-primary hover:underline">Apache License 2.0</a> ~ 2025
+          {(new Date().getFullYear() > 2025 ? ` - ${new Date().getFullYear()}` : '')} 
+          </p>
       </footer>
     </div>
   );
