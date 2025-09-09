@@ -88,7 +88,7 @@ const validateProductString = (s: string): Product[] => {
 
 export default function ProductValidator() {
   const [prodString, setProdString] = useState(
-    "Example category 1;Example product 1;1;3.50,Example category 2;Example product 2;1;5.99"
+    "Example category 1;Example product 1;1;3.50,Example category 2;Example product 2;1;5.99;event10|event12=99"
   );
   const [validation, setValidation] = useState<Product[]>([]);
   const [isStringValid, setIsStringValid] = useState(true);
