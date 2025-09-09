@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+9import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./../components/ui/card";
 import { Textarea } from "./../components/ui/textarea";
 import { Badge } from "./../components/ui/badge";
@@ -88,7 +88,7 @@ const validateProductString = (s: string): Product[] => {
 
 export default function ProductValidator() {
   const [prodString, setProdString] = useState(
-    "Example category 1;Example product 1;1;3.50;;eVar=100|eVar10=1.00,Example category 2;Example product 2;1;5.99;event10|event12=99"
+    "Example category 1;Example product 1;1;3.50;;eVar100|eVar10=1.00,Example category 2;Example product 2;1;5.99;event10|event12=99"
   );
   const [validation, setValidation] = useState<Product[]>([]);
   const [isStringValid, setIsStringValid] = useState(true);
